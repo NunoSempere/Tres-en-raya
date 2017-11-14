@@ -6,21 +6,21 @@
 
 // Esquema general del programa:
 // Las funciones copioposiciondetabla1atabla2 e imprimeposicion son solo para comodidad.
-// La función evalpos evalúa una posición. Devuelve 0 si es o bien empate o bien todavía no ha ganado nadie, 
+// La funciÃ³n evalpos evalÃºa una posiciÃ³n. Devuelve 0 si es o bien empate o bien todavÃ­a no ha ganado nadie, 
 // 			1 si ha ganado el primer jugador y 2 si ha ganado el segundo
-// La función mejorjugadasiguiente es una función con dos parámetros iniciales: el jugador que quieres que gane (1 ó 2) y la posición
-//			Es una función definida sobre la estructura doble, es decir, que devuelve, en el fondo, tres cosas:
-// 				jugadamejor: Un número del 0-8, que define qué jugará el ordenador.
+// La funciÃ³n mejorjugadasiguiente es una funciÃ³n con dos parÃ¡metros iniciales: el jugador que quieres que gane (1 Ã³ 2) y la posiciÃ³n
+//			Es una funciÃ³n definida sobre la estructura doble, es decir, que devuelve, en el fondo, tres cosas:
+// 				jugadamejor: Un nÃºmero del 0-8, que define quÃ© jugarÃ¡ el ordenador.
 // 				resultadomejorjugada: 0, 1, 2. Si la mejor jugada resulta en un empate, devuelve 0. 
-// 					Si resulta en que gane el jugador 1, devolverá 1, y si resulta en que gané el ordenador 2
-// 					Nótese que si todas las jugadas son perdedoras, la mejor jugada es perdedora también.
-//			¿Cómo obtiene mejorjugadasiguiente la mejor jugada siguiente?	
-// 				1) Si la partida está ganada, devuelve como resultadomejorjugada el número del ganador.
-//				2) Si la partida no está ganada, juega cada jugada legal por separado y se llama a sí misma, con el tablero
-//						con una jugada añadida, y con el objetivo de que gane el oponente.
+// 					Si resulta en que gane el jugador 1, devolverÃ¡ 1, y si resulta en que ganÃ© el ordenador 2
+// 					NÃ³tese que si todas las jugadas son perdedoras, la mejor jugada es perdedora tambiÃ©n.
+//			Â¿CÃ³mo obtiene mejorjugadasiguiente la mejor jugada siguiente?	
+// 				1) Si la partida estÃ¡ ganada, devuelve como resultadomejorjugada el nÃºmero del ganador.
+//				2) Si la partida no estÃ¡ ganada, juega cada jugada legal por separado y se llama a sÃ­ misma, con el tablero
+//						con una jugada aÃ±adida, y con el objetivo de que gane el oponente.
 //						El resultado de una jugada es el resultado de la mejor respuesta que puede dar el oponente a esa jugada.
 //						Computados los resultados de todas las jugadas legales, se elige el mejor
-//						*La magia de la recursión*
+//						*La magia de la recursiÃ³n*
 
 typedef struct {
 	int jugadamejor;
@@ -77,7 +77,7 @@ int evalpos(int *p){
 	
 	// Diagonal 2 4 6
 	if(p[2]!=0 && p[2]==p[4] && p[2]==p[6] ){ 
-		// Aquí lo escribimos diferente para recordar que *p == p[0]; *(p+x) == p[x]
+		// AquÃ­ lo escribimos diferente para recordar que *p == p[0]; *(p+x) == p[x]
 		if(ganador!=0 && ganador!=p[2]){
 			return 22; // Hay dos ganadores
 		}
@@ -98,25 +98,24 @@ int imprimeposicion(int *p){
 }
 
 doble mejorjugadasiguiente(int *p, int jugador){ 
-	// Calcula la mejor jugada siguiente para el jugador "jugador", que debe ser o 1 ó 2.
-	// La versión inicial sólo calcula si está a punto de ganarse.
-	
-	// Comprobaciones preliminares.	
+	// Calcula la mejor jugada siguiente para el jugador "jugador", que debe ser o 1 Ã³ 2.
+
+	// Comprobaciones preliminares:
 	doble error;
 	error.jugadamejor=-1;
 	error.resultadomejorjugada=-1;
 	
 	if(jugador!=1 && jugador!=2){
 		error.fail=007;
-		return error; //  No puede haber más de dos jugadores en un tres en raya.
+		return error; //  No puede haber mÃ¡s de dos jugadores en un tres en raya.
 	}
 	if(evalpos(p)!=0){
 		error.resultadomejorjugada=evalpos(p);
 		error.fail=111;
-		return error; // Si la partida ya está ganada, no hay mejor jugada siguiente.
+		return error; // Si la partida ya estÃ¡ ganada, no hay mejor jugada siguiente.
 	}
 	
-	
+	// Chicha:
 	int i;
 	int tabla[9];
 	int resultadoposicion[9]={-1,-1,-1,-1,-1,-1,-1,-1,-1}; 
@@ -133,13 +132,11 @@ doble mejorjugadasiguiente(int *p, int jugador){
 			numerodehuecoslibres = numerodehuecoslibres+1;
 			
 			tabla[i]=jugador;
-			//printf("\n%d,turno siguiente:%d",i,2-((jugador+1)%2));
 			resultadoposicion[i]=mejorjugadasiguiente(tabla, 2-((jugador+1)%2)).resultadomejorjugada;
-			
+			//printf("\n%d,turno siguiente:%d",i,2-((jugador+1)%2));
 			// 2-(jugador+1)%2 devuelve 2 si jugador =1 y 1 si jugador=2
-			
 			//printf("\nresultadoposicion[%d]= %d",i,resultadoposicion[i]);
-			// print diagnóstico
+			// prints diagnÃ³sticos
 		}
 
 	}
@@ -155,7 +152,7 @@ doble mejorjugadasiguiente(int *p, int jugador){
 			output.resultadomejorjugada=0;
 			output.jugadamejor=i;
 		}
-		if(resultadoposicion[i]==(2-((jugador+1)%2))  && output.resultadomejorjugada==-1 ){ // Puede que la única jugada disponible le conceda la victoria al oponente
+		if(resultadoposicion[i]==(2-((jugador+1)%2))  && output.resultadomejorjugada==-1 ){ // Puede que la Ãºnica jugada disponible le conceda la victoria al oponente
 			output.resultadomejorjugada=2-((jugador+1)%2);
 			output.jugadamejor=i;
 		}
@@ -167,7 +164,7 @@ doble mejorjugadasiguiente(int *p, int jugador){
 	return output;
 }
 
-int copioposiciondetabla1atabla2(int *tabla1, int *tabla2){ // Sé que hay 9 posiciones.
+int copioposiciondetabla1atabla2(int *tabla1, int *tabla2){ // SÃ© que hay 9 posiciones.
 	int i;
 	for(i=0;i<9;i=i+1){
 		tabla2[i]=tabla1[i];
@@ -176,15 +173,11 @@ int copioposiciondetabla1atabla2(int *tabla1, int *tabla2){ // Sé que hay 9 posi
 
 
 int main(int argc, char *argv[]) {
-	//int tabla[9]={0}; // inicializa todos a 0s. No funcionaría con otro número
-
-	//int tabla[9]=	{0,0,0,
-	//				 0,0,0,      
-	//				 0,0,0};
+	//int tabla[9]={0}; // inicializa todos a 0s. No funcionarÃ­a con otro nÃºmero
 	int tabla[9]={		0,0,0,
-						0,0,0,
-						0,0,0};				 
-	doble movimiento;
+				0,0,0,
+				0,0,0};				 
+	doble movimiento; 
 	int jugada_del_usuario;
 	int contador =0;
 	
@@ -209,7 +202,6 @@ int main(int argc, char *argv[]) {
 		printf("\nLa computadora juega %d\n",movimiento.jugadamejor);
 		tabla[movimiento.jugadamejor] = computadora; // computadora :=2
 	
-		//printf("\nEl resultado de esa jugada es %d",movimiento.resultadomejorjugada);
 		contador=contador+1;
 	}
 	imprimeposicion(&tabla);

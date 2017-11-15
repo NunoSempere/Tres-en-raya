@@ -184,7 +184,7 @@ int main(int argc, char *argv[]) {
 	printf("Las posiciones del tablero son las siguientes:");
 	printf("\n0 1 2\n3 4 5\n6 7 8\n");
 	
-	while(evalpos(tabla)==0 && contador<10){
+	while(evalpos(tabla)==0 && contador<9){ // N.B:: Antes tenía <10, por lo que se volverá loco si se agota el tablero
 	
 		imprimeposicion(&tabla);
 
@@ -206,6 +206,10 @@ int main(int argc, char *argv[]) {
 	}
 	imprimeposicion(&tabla);
 	printf("El resultado de la partida es %d",evalpos(tabla));
+	
+	//Para que no cierre la ventana al terminar. Añadido posteriormente.
+	printf("Presiona cualquier tecla...");
+	scanf("\n%c");
 	
 	return 0;
 }

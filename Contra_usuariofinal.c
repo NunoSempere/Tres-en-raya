@@ -187,11 +187,11 @@ int main(int argc, char *argv[]) {
 	while(evalpos(tabla)==0 && contador<9){ // N.B:: Antes tenía <10, por lo que se volverá loco si se agota el tablero
 	
 		imprimeposicion(&tabla);
-
+		// Controlar el contador; como mueven tanto máquina como usuario, el contador no llega a 9
 		printf("QUE JUGADA QUIERE JUGAR EL HONORABLE USUARIO? \n[UN NUMERO DEL 0-8] QUE DESIGNE A UNA CASILLA NO OCUPADA  ");
 		scanf("\n%d",&jugada_del_usuario);
 		
-		while(jugada_del_usuario<0 || jugada_del_usuario>8 || tabla[jugada_del_usuario]!=0){
+		while(jugada_del_usuario<0 || tabla[jugada_del_usuario]!=0){
 			printf("INTRODUZCA EL NOBLE USUARIO OTRA JUGADA  \n[UN NUMERO DEL 0-8] QUE DESIGNE A UNA CASILLA NO OCUPADA  ");
 			scanf("\n%d",&jugada_del_usuario);			
 		}
